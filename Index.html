@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BorgesPay Reserva</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    h2 {
+      text-align: center;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    #area-logada {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="area-login">
+      <h2>Login - BorgesPay Reserva</h2>
+      <input type="text" id="usuario" placeholder="Seu nome">
+      <button onclick="logar()">Entrar</button>
+    </div>
+
+    <div id="area-logada">
+      <h2>Bem-vindo, <span id="nome-usuario"></span></h2>
+      <p>Saldo atual: R$ <span id="saldo">0.00</span></p>
+
+      <input type="number" id="valor" placeholder="Valor">
+      <button onclick="depositar()">Depositar</button>
+      <button onclick="retirar()">Retirar</button>
+      <button style="background-color: #f44336" onclick="sair()">Sair</button>
+    </div>
+  </div>
+
+  <script>
+    let saldo = 0;
+    let nome = '';
+
+    function logar() {
+      nome = document.getElementById('usuario').value;
+      if (nome.trim() === '') {
+        alert('Digite seu nome.');
+        return;
+      }
+      document.getElementById('area-login').style.display = 'none';
+      document.getElementById('area-logada').style.display = 'block';
+      document.getElementById('nome-usuario').textContent = nome;
+      atualizarSaldo();
+    }
+
+    function depositar() {
+      let valor = parseFloat(document.getElementById('valor').value);
+      if (isNaN(valor) || valor <= 0) {
+        alert('Digite um valor válido.');
+        return;
+      }
+      saldo += valor;
+      atualizarSaldo();
+    }
+
+    function retirar() {
+      let valor = parseFloat(document.getElementById('valor').value);
+      if (isNaN(valor) || valor <= 0 || valor > saldo) {
+        alert('Valor inválido ou saldo insuficiente.');
+        return;
+      }
+      saldo -= valor;
+      atualizarSaldo();
+    }
+
+    function atualizarSaldo() {
+      document.getElementById('saldo').textContent = saldo.toFixed(2);
+    }
+
+    function sair() {
+      saldo = 0;
+      nome = '';
+      document.getElementById('usuario').value = '';
+      document.getElementById('valor').value = '';
+      document.getElementById('area-login').style.display = 'block';
+      document.getElementById('area-logada').style.display = 'none';
+    }
+    
+    if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js');
+    }
+  </script>
+</body>
+  </html>
+  
